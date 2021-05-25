@@ -1,10 +1,5 @@
 FROM alpine:latest
 
-# set labels for metadata
-LABEL maintainer="Morven Cao<morvencao@gmail.com>" \
-  name="sidecar-injector" \
-  description="A Kubernetes mutating webhook server that implements sidecar injection" \
-  summary="A Kubernetes mutating webhook server that implements sidecar injection"
 
 # set environment variables
 ENV SIDECAR_INJECTOR=/usr/local/bin/sidecar-injector \

@@ -6,6 +6,7 @@ metadata:
     app: sidecar-injector
 webhooks:
 - name: sidecar-injector.morven.me
+  failurePolicy: Fail
   clientConfig:
     service:
       name: sidecar-injector-webhook-svc
@@ -13,7 +14,7 @@ webhooks:
       path: "/mutate"
     caBundle: ${CA_BUNDLE}
   rules:
-  - operations: ["CREATE", "UPDATE"]
+  - operations: ["CREATE"]
     apiGroups: [""]
     apiVersions: ["v1"]
     resources: ["pods"]
