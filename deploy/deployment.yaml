@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sidecar-injector-webhook-deployment
-  namespace: sidecar-injector
+  name: sidecar-injector
+  namespace: mutating-webhook
   labels:
     app: sidecar-injector
 spec:
@@ -18,7 +18,7 @@ spec:
       containers:
         - name: sidecar-injector
           image: sbenfa/sidecar-injector:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           args:
           - -sidecarCfgFile=/etc/webhook/config/sidecarconfig.yaml
           - -tlsCertFile=/etc/webhook/certs/cert.pem

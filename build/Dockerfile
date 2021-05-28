@@ -1,6 +1,5 @@
 FROM alpine:latest
 
-
 # set environment variables
 ENV SIDECAR_INJECTOR=/usr/local/bin/sidecar-injector \
   USER_UID=1001 \

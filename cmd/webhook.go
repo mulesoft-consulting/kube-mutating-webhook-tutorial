@@ -34,8 +34,8 @@ var ignoredNamespaces = []string{
 }
 
 const (
-	admissionWebhookAnnotationInjectKey = "sidecar-injector-webhook.morven.me/inject"
-	admissionWebhookAnnotationStatusKey = "sidecar-injector-webhook.morven.me/status"
+	admissionWebhookAnnotationInjectKey = "enel-sidecar-injector/inject"
+	admissionWebhookAnnotationStatusKey = "enel-sidecar-injector/status"
 )
 
 type WebhookServer struct {
@@ -199,7 +199,8 @@ func createPatch(pod *corev1.Pod, sidecarConfig *Config, annotations map[string]
 
 	patch = append(patch, addContainer(pod.Spec.Containers, sidecarConfig.Containers, "/spec/containers")...)
 	patch = append(patch, addVolume(pod.Spec.Volumes, sidecarConfig.Volumes, "/spec/volumes")...)
-	patch = append(patch, updateAnnotation(pod.Annotations, annotations)...)
+	//MODIFIED
+	//patch = append(patch, updateAnnotation(pod.Annotations, annotations)...)
 
 	return json.Marshal(patch)
 }

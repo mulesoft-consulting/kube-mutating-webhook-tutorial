@@ -1,4 +1,4 @@
-module github.com/morvencao/kube-mutating-webhook-tutorial
+module github.com/mulesoft-consulting/kubernetes-sidecar-injector
 
 go 1.13
 
