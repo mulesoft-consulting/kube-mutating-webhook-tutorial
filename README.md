@@ -14,81 +14,101 @@ admissionregistration.k8s.io/v1
 admissionregistration.k8s.io/v1beta1
 ```
 
-2. Create a namaspace called `mutating-webhook`
+2. Create a namespace for hosting Webhook and related config (from project root folder):
 ```
-kubectl create ns mutating-webhook
+kubectl apply -f deployments/webhook-namespace.yaml
 ```
 
 3. Create a signed cert/key pair and store it in a Kubernetes `secret` that will be consumed by sidecar injector deployment. 
-
-From `deploy` folder:
 ```
-./webhook-create-signed-cert.sh \
-    --service sidecar-injector-webhook-svc \
-    --secret sidecar-injector-webhook-certs \
+scripts/webhook-create-signed-cert.sh \
+    --service sidecar-injector-svc \
+    --secret sidecar-injector-certs \
     --namespace mutating-webhook
+```
+
+Verify secret has been created by running:
+```
+kubectl get secrets/sidecar-injector-certs -n mutating-webhook
 ```
 
 4. Patch the `mutatingwebhook.yaml` with correct CA Bundle value from Kubernetes cluster. File `mutatingwebhook-ca-bundle.yaml`will be generated.
 
 ```
-cat mutatingwebhook.yaml | \
-    ./webhook-patch-ca-bundle.sh > \
-    mutatingwebhook-ca-bundle.yaml
+cat deployments/mutatingwebhook.yaml | \
+    scripts/webhook-patch-ca-bundle.sh | \
+    tee  deployments/mutatingwebhook-ca-bundle.yaml helm/sidecar-injector/templates/mutatingwebhook-ca-bundle.yaml
 ```
 
-## Build
-Change `IMAGE_REPO` and `IMAGE_NAME` parameters in `Makefile` (including target image repo)
-
-1. Build binary
-
-```
-make build
-```
-
-2. Build docker image
-   
-```
-make build-image
-```
-
-3. push docker image
-
-```
-make push-image
-```
-
-## Deploy
-
-Please note that file `configmap.yaml` contains the config of the sidecars to be injected.
-From `deploy`folder launch:
-
-```
-kubectl apply -f nginxconfigmap.yaml
-kubectl apply -f configmap.yaml
-kubectl apply -f deployment.yaml
-kubectl apply -f service.yaml
-kubectl apply -f mutatingwebhook-ca-bundle.yaml
-```
-
-## Test
-Annotate namespace (as configured in namespaceSelector in mutatingwebhook.yaml)
+5. Annotate your application namespace in order trigger the Mutating Webhook on Pod creation. The required annotation is `enel-sidecar-injector: enabled` (as configured in NamespaceSelector `mutatingwebhook.yaml`).
  ```
 kubectl label namespaces <application namespace> enel-sidecar-injector=enabled
 ```
 
-Create test resource 
+# Build Phase (opt.)
+Build to be accomplished in case of own repo usage
+1. Go Build (target Linux Alpine) - binary is provided in build/_output folder
 ```
-kubectl apply -f test.yaml -n <application namespace>
+make build
 ```
 
-And finally verify sidecar container is injected:
+2. Docker Build
+Provide target repository
+```
+make build-image IMAGE_REPO=<docker.io/sbenfa> IMAGE_NAME=<sidecar-injector>
+```
+
+3. Push to container registry
+```
+make push IMAGE_REPO=<docker.io/sbenfa> IMAGE_NAME=<sidecar-injector>
+```
+
+## Create Kubernetes resources
+You can install the rest of required Kubernetes resources via Helm Chart:
+```
+helm install sidecar-injector ./helm/sidecar-injector
+```
+
+As an alternative you can create your resources manually, as follows. Please remind to replace `IMAGE_REPO/IMAGE_NAME` with personal repo within `deployments/deployment.yaml`. Please note that file `configmap.yaml` contains the config of the sidecars to be injected.
+```
+kubectl apply -f deployments/nginxconfigmap.yaml -n <application namespace>
+kubectl apply -f deployments/configmap.yaml
+kubectl apply -f deployments/deployment.yaml
+kubectl apply -f deployments/service.yaml
+kubectl apply -f deployments/mutatingwebhook-ca-bundle.yaml
+```
+
+And verify which resources have been correctly created by executing:
+```
+kubectl get deployments -n mutating-webhook -l app=sidecar-injector
+kubectl get po -n mutating-webhook -l app=sidecar-injector
+kubectl get service/sidecar-injector-svc -n mutating-webhook 
+kubectl get mutatingwebhookconfiguration.admissionregistration.k8s.io 
+```
+
+## Test
+Verify that the target namespace is properly annotated (expected `enel-sidecar-injector: enabled`).
+```
+kubectl describe ns <application namespace>
+```
+
+Create test resource 
+```
+kubectl apply -f deployments/test.yaml -n <application namespace>
+```
+
+Verify that the sidecar container is injected:
 
 ```
 kubectl get pod -n <application namespace>
 NAME                     READY     STATUS        RESTARTS   AGE
 test-<xyz>                   2/2       Running       0          1m
+```
+```
 kubectl -n <application namespace> get pod test-<xyz> -o jsonpath="{.spec.containers[*].name}"
 test sidecar-nginx
 ```
-
+And finally clean test deployment:
+```
+kubectl delete -f deployments/test.yaml -n <application namespace>
+```

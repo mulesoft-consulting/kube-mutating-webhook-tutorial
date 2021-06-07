@@ -46,8 +46,8 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-[ -z "${service}" ] && service=sidecar-injector-webhook-svc
-[ -z "${secret}" ] && secret=sidecar-injector-webhook-certs
+[ -z "${service}" ] && service=sidecar-injector-svc
+[ -z "${secret}" ] && secret=sidecar-injector-certs
 [ -z "${namespace}" ] && namespace=default
 
 if [ ! -x "$(command -v openssl)" ]; then
@@ -129,3 +129,7 @@ kubectl create secret generic ${secret} \
         --from-file=cert.pem="${tmpdir}"/server-cert.pem \
         --dry-run -o yaml |
     kubectl -n ${namespace} apply -f -
+
+# cleaning
+rm "${tmpdir}"/server-key.pem
+rm "${tmpdir}"/server-cert.pem

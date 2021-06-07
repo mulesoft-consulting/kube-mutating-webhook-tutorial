@@ -5,11 +5,11 @@ metadata:
   labels:
     app: sidecar-injector
 webhooks:
-- name: sidecar-injector.mutating-webhook.me
+- name: sidecar-injector.mutating-webhook.svc
   failurePolicy: Fail
   clientConfig:
     service:
-      name: sidecar-injector-webhook-svc
+      name: sidecar-injector-svc
       namespace: mutating-webhook
       path: "/mutate"
     caBundle: ${CA_BUNDLE}

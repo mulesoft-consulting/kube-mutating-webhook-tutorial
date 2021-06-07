@@ -3,6 +3,8 @@
 *.dll
 *.so
 *.dylib
+.vscode/
+
 
 # Test binary, build with `go test -c`
 *.test
@@ -11,7 +13,6 @@
 *.out
 
 vendor/*
-
 build/_output
 
 # GOPATH

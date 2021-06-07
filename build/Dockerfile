@@ -6,11 +6,7 @@ ENV SIDECAR_INJECTOR=/usr/local/bin/sidecar-injector \
   USER_NAME=sidecar-injector
 
 # install sidecar-injector binary
-COPY build/_output/linux/bin/sidecar-injector ${SIDECAR_INJECTOR}
-
-# copy licenses
-RUN mkdir /licenses
-COPY LICENSE /licenses
+COPY ./_output/sidecar-injector ${SIDECAR_INJECTOR}
 
 # set entrypoint
 ENTRYPOINT ["/usr/local/bin/sidecar-injector"]
