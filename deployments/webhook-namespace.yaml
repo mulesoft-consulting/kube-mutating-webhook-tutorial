@@ -1,4 +1,4 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: mutating-webhook
+  name: glin-ap31312mp00875-dev-platform-namespace

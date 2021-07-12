@@ -46,9 +46,9 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-[ -z "${service}" ] && service=sidecar-injector-svc
-[ -z "${secret}" ] && secret=sidecar-injector-certs
-[ -z "${namespace}" ] && namespace=default
+[ -z "${service}" ] && service=memulesidecarinject-svc
+[ -z "${secret}" ] && secret=memulesidecarinject-certs
+[ -z "${namespace}" ] && namespace=glin-ap31312mp00875-dev-platform-namespace
 
 if [ ! -x "$(command -v openssl)" ]; then
     echo "openssl not found"

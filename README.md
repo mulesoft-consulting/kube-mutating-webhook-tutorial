@@ -22,14 +22,14 @@ kubectl apply -f deployments/webhook-namespace.yaml
 3. Create a signed cert/key pair and store it in a Kubernetes `secret` that will be consumed by sidecar injector deployment. 
 ```
 scripts/webhook-create-signed-cert.sh \
-    --service sidecar-injector-svc \
-    --secret sidecar-injector-certs \
-    --namespace mutating-webhook
+    --service memulesidecar \
+    --secret memulesidecarinject-certs \
+    --namespace glin-ap31312mp00875-dev-platform-namespace
 ```
 
 Verify secret has been created by running:
 ```
-kubectl get secrets/sidecar-injector-certs -n mutating-webhook
+kubectl get secrets/memulesidecarinject-certs -n glin-ap31312mp00875-dev-platform-namespace
 ```
 
 4. Patch the `mutatingwebhook.yaml` with correct CA Bundle value from Kubernetes cluster. File `mutatingwebhook-ca-bundle.yaml`will be generated.
@@ -37,12 +37,12 @@ kubectl get secrets/sidecar-injector-certs -n mutating-webhook
 ```
 cat deployments/mutatingwebhook.yaml | \
     scripts/webhook-patch-ca-bundle.sh | \
-    tee  deployments/mutatingwebhook-ca-bundle.yaml helm/sidecar-injector/templates/mutatingwebhook-ca-bundle.yaml
+    tee  deployments/mutatingwebhook-ca-bundle.yaml helm/memulesidecar/templates/mutatingwebhook-ca-bundle.yaml
 ```
 
 5. Annotate your application namespace in order trigger the Mutating Webhook on Pod creation. The required annotation is `enel-sidecar-injector: enabled` (as configured in NamespaceSelector `mutatingwebhook.yaml`).
  ```
-kubectl label namespaces <application namespace> enel-sidecar-injector=enabled
+kubectl label namespaces 4dddcd4f-d96b-4503-ab65-42ae5a722e0f enel-sidecar-injector=enabled
 ```
 
 # Build Phase (opt.)
@@ -66,7 +66,7 @@ make push IMAGE_REPO=<docker.io/sbenfa> IMAGE_NAME=<sidecar-injector>
 ## Create Kubernetes resources
 You can install the rest of required Kubernetes resources via Helm Chart:
 ```
-helm install sidecar-injector ./helm/sidecar-injector
+helm install memulesidecar ./helm/memulesidecar
 ```
 
 As an alternative you can create your resources manually, as follows. Please remind to replace `IMAGE_REPO/IMAGE_NAME` with personal repo within `deployments/deployment.yaml`. Please note that file `configmap.yaml` contains the config of the sidecars to be injected.

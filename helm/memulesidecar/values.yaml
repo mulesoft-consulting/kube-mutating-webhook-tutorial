@@ -1,8 +1,6 @@
-# Default values for annotation-injector.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-appname: sidecar-injector
-namespace: mutating-webhook
+# If you need to add values add rows below this comment
+appname: memulesidecarinject
+namespace: glin-ap31312mp00875-dev-platform-namespace
 replicaCount: 1
 
 image:
@@ -11,7 +9,7 @@ image:
   pullPolicy: Always
 
 tls:
-  secret: sidecar-injector-certs
+  secret: memulesidecarinject-certs
 
 sidecar:
   config: sidecar-injector-webhook-configmap
@@ -22,3 +20,4 @@ application:
 service:
   port: 443
   targetPort: 8443
+  name: memulesidecar

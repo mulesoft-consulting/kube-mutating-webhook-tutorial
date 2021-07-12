@@ -3,14 +3,14 @@ kind: MutatingWebhookConfiguration
 metadata:
   name: sidecar-injector-webhook-cfg
   labels:
-    app: sidecar-injector
+    app: memulesidecarinject
 webhooks:
-- name: sidecar-injector.mutating-webhook.svc
+- name: memulesidecarinject.glin-ap31312mp00875-dev-platform-namespace.svc
   failurePolicy: Fail
   clientConfig:
     service:
-      name: sidecar-injector-svc
-      namespace: mutating-webhook
+      name: memulesidecar
+      namespace: glin-ap31312mp00875-dev-platform-namespace
       path: "/mutate"
     caBundle: ${CA_BUNDLE}
   rules:
