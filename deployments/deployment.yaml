@@ -1,4 +1,3 @@
-apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: memulesidecarinject
@@ -17,12 +16,12 @@ spec:
     spec:
       containers:
         - name: memulesidecarinject
-          image: sbenfa/sidecar-injector:latest
+          image: "sbenfa/sidecar-injector:latest"
           imagePullPolicy: Always
           args:
           - -sidecarCfgFile=/etc/webhook/config/sidecarconfig.yaml
-          - -tlsCertFile=/etc/webhook/certs/cert.pem
-          - -tlsKeyFile=/etc/webhook/certs/key.pem
+          - -tlsCertFile=/etc/webhook/certs/tls.crt
+          - -tlsKeyFile=/etc/webhook/certs/tls.key
           - -alsologtostderr
           - -v=4
           - 2>&1
@@ -35,7 +34,7 @@ spec:
       volumes:
       - name: webhook-certs
         secret:
-          secretName: memulesidecarinject-certs
+          secretName: memulesidecarinject-certificate
       - name: webhook-config
         configMap:
           name: sidecar-injector-webhook-configmap

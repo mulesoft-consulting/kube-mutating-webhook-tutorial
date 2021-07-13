@@ -9,7 +9,10 @@ image:
   pullPolicy: Always
 
 tls:
-  secret: memulesidecarinject-certs
+  secret: memulesidecarinject-certificate
+
+ca:
+  secret: ca-key-pair
 
 sidecar:
   config: sidecar-injector-webhook-configmap
