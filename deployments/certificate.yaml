@@ -1,0 +1,29 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: memulesidecarinject-certificate
+  namespace: glin-ap31312mp00875-dev-platform-namespace
+spec:
+  secretName: memulesidecarinject-certificate
+  commonName: memulesidecar.glin-ap31312mp00875-dev-platform-namespace.svc
+  dnsNames:
+  - memulesidecar.glin-ap31312mp00875-dev-platform-namespace.svc
+  - localhost
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    - client auth
+  issuerRef:
+    name: ca-issuer
+    kind: ClusterIssuer
+---
+
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: ca-issuer
+  namespace: cert-manager
+spec:
+  ca: 
+    secretName: {{ .Values.ca.secret }}

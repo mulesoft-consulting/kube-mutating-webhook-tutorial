@@ -18,4 +18,3 @@ build/_output
 # GOPATH
 .go
 
-mutatingwebhook-ca-bundle.yaml

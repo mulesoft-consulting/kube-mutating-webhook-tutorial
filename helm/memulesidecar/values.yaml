@@ -1,0 +1,26 @@
+# If you need to add values add rows below this comment
+appname: memulesidecarinject
+namespace: glin-ap31312mp00875-dev-platform-namespace
+replicaCount: 1
+
+image:
+  repository: sbenfa/sidecar-injector
+  tag: latest
+  pullPolicy: Always
+
+tls:
+  secret: memulesidecarinject-certificate
+
+ca:
+  secret: ca-key-pair
+
+sidecar:
+  config: sidecar-injector-webhook-configmap
+
+application:
+  namespace: 95fa13ec-78c7-4b9c-a73a-262a94aa4594
+
+service:
+  port: 443
+  targetPort: 8443
+  name: memulesidecar

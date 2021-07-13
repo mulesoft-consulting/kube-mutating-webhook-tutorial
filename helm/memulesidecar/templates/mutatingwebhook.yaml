@@ -3,7 +3,7 @@ kind: MutatingWebhookConfiguration
 metadata:
   name: sidecar-injector-webhook-cfg
   annotations:
-    cert-manager.io/inject-ca-from: glin-ap31312mp00875-dev-platform-namespace/memulesidecarinject-certificate
+    cert-manager.io/inject-ca-from: {{ .Values.namespace }}/{{ .Values.appname }}-certificate
   labels:
     app: memulesidecarinject
 webhooks:
