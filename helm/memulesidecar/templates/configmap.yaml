@@ -13,7 +13,7 @@ data:
         value: logaggreg.glin-ap31312plcpfld-dev-platform-namespace.global
       envFrom:
       - configMapRef:
-          name: sidecar-configmap
+          name: fluentbit-configmap
       volumeMounts:
         - name: shared-log
           mountPath: /var/log/platform

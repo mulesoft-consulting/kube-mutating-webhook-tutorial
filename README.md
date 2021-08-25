@@ -89,9 +89,9 @@ Additional configmap can be added on need and referenced from this,
 ## Test
 Verify resources have been correctly created by executing:
 ```
-kubectl get deployments -n mutating-webhook -l app=sidecar-injector
-kubectl get po -n mutating-webhook -l app=sidecar-injector
-kubectl get service/sidecar-injector-svc -n mutating-webhook 
+kubectl get deployments -n glin-ap31312mp00875-dev-platform-namespace -l app=sidecar-injector
+kubectl get po -n glin-ap31312mp00875-dev-platform-namespace -l app=sidecar-injector
+kubectl get service/sidecar-injector-svc -n glin-ap31312mp00875-dev-platform-namespace 
 kubectl get mutatingwebhookconfiguration.admissionregistration.k8s.io 
 ```
 
