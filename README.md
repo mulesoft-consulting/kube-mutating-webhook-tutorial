@@ -14,12 +14,7 @@ admissionregistration.k8s.io/v1
 admissionregistration.k8s.io/v1beta1
 ```
 
-2. Create a namespace for hosting Webhook and related config (from project root folder):
-```
-kubectl apply -f deployments/webhook-namespace.yaml
-```
-
-3. Mutating Webhook requires TLS in order to be invoked by Kube API Server. Certificates are managed through Kubernetes [cert-manager](https://cert-manager.io/docs/concepts/ca-injector/) 
+2. Mutating Webhook requires TLS in order to be invoked by Kube API Server. Certificates are managed through Kubernetes [cert-manager](https://cert-manager.io/docs/concepts/ca-injector/) 
 
 
 **Install Cert manager**
@@ -54,7 +49,7 @@ kubectl create secret tls ca-key-pair \
 
 For further details about `cert-manager` CRDs and their use, please refer [here](https://docs.cert-manager.io/en/release-0.8/tasks/issuers/setup-ca.html)
 
-4. Annotate your application namespace in order trigger the Mutating Webhook on Pod creation. The required annotation is `enel-sidecar-injector: enabled` (as configured in NamespaceSelector `mutatingwebhook.yaml`).
+3. Annotate your application namespace in order trigger the Mutating Webhook on Pod creation. The required annotation is `enel-sidecar-injector: enabled` (as configured in NamespaceSelector `mutatingwebhook.yaml`).
  ```
 kubectl label namespaces 4dddcd4f-d96b-4503-ab65-42ae5a722e0f enel-sidecar-injector=enabled
 ```
@@ -90,9 +85,9 @@ Additional configmap can be added on need and referenced from this,
 ## Test
 Verify resources have been correctly created by executing:
 ```
-kubectl get deployments -n glin-ap31312mp00875-dev-platform-namespace -l app=sidecar-injector
-kubectl get po -n glin-ap31312mp00875-dev-platform-namespace -l app=sidecar-injector
-kubectl get service/sidecar-injector-svc -n glin-ap31312mp00875-dev-platform-namespace 
+kubectl get deployments -n glin-ap31312mp00875-dev-platform-namespace -l app=memulesidecarinject
+kubectl get po -n glin-ap31312mp00875-dev-platform-namespace -l app=memulesidecarinject
+kubectl get service/memulesidecar -n glin-ap31312mp00875-dev-platform-namespace 
 kubectl get mutatingwebhookconfiguration.admissionregistration.k8s.io 
 ```
 
