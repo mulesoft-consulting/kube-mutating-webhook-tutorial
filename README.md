@@ -39,7 +39,8 @@ For cert-manager troubleshooting, refer to [official guide](https://cert-manager
 **Configure key pairs to allow certificate signing by cert-manager**
 Create the key pairs (in the example validity is set to 10 years). Please be sure to create the openssl config upfront, as documented [here](https://github.com/jetstack/cert-manager/issues/279)
 ```
-export COMMON_NAME=memulesidecar.glin-ap31312mp00875-dev-platform-namespace.svc
+openssl genrsa -out ca.key 2048 \
+export COMMON_NAME=memulesidecar.glin-ap31312mp00875-dev-platform-namespace.svc \
 openssl req -x509 -new -nodes -key ca.key -subj "/CN=${COMMON_NAME}" -days 3650 -extensions v3_ca -out ca.crt -config openssl-with-ca.cnf    
 ```
 
